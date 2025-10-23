@@ -4,6 +4,7 @@
 #include <iostream>
 #include "Vector2Int.h"
 #include "GameObject.h"
+#include "Move.h"
 
 class Map
 {
@@ -11,11 +12,12 @@ class Map
     public: const Vector2Int& size() const;
 
     private: GameObject* player_;
+    private: MoveComponent* player_mover_;
 
     public: Map(const Vector2Int& _size);
     public: ~Map();
 
-    public: void set_player(GameObject* const player);
+    public: void set_player(GameObject* const player, MoveComponent* const player_mover);
 
     public: void display() const;
     public: bool is_in_bounds(const Vector2Int& pos);

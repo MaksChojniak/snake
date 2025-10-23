@@ -14,9 +14,10 @@ Map::~Map()
         delete player_;
 }
 
-void Map::set_player(GameObject* const player)
+void Map::set_player(GameObject* const player, MoveComponent* const player_mover)
 {
     player_ = player;
+    player_mover_ = player_mover;
     cout << "set player on position: " << player_->position() << endl;
 }
 
@@ -27,7 +28,7 @@ bool Map::is_in_bounds(const Vector2Int& pos) { return pos.x >= 0 && pos.x < siz
 char Map::get_char(const Vector2Int& pos) const
 {
     if(player_->position() == pos)
-        return '>'; 
+        return player_mover_->get_char(); 
     return ' '; 
 }
 

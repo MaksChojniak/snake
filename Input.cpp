@@ -15,8 +15,8 @@ InputComponent::InputComponent(): direction_(Vector2Int::Down) {}
 
 void InputComponent::Update()
 {
-    direction_ = readInput(direction_);
     usleep(SLEEP_TIME);
+    direction_ = readInput(direction_);
 }
 
 ostream& InputComponent::view(ostream& out) const { return out << "[InputComponent]"; }

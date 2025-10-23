@@ -21,6 +21,7 @@ class MoveComponent : public Component
     public: void Update() override;
 
     private: void set_position(GameObject* const obj, const Vector2Int& pos);
+    public: char get_char() const;
 
     public: std::ostream& view(std::ostream& out) const override;
 };
