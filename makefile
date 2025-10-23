@@ -15,7 +15,7 @@ SRC = main.cpp \
 OBJ = $(SRC:.cpp=.o)
 
 # Executable
-TARGET = snake
+TARGET = main.exe
 
 # Default target
 all: $(TARGET)
