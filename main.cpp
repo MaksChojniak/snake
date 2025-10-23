@@ -1,37 +1,34 @@
 #include <iostream>
-// #include "Vector2Int.cpp"
-#include "Input.cpp"
-#include "GameObject.cpp"
+#include <cstdlib>
+
+#include "Vector2Int.h"
+#include "Map.h"
+#include "Input.h"
+#include "Move.h"
+#include "GameObject.h"
 
 using namespace std;
 
-class TestComponent : public Component
-{
-    private: string str_;
-
-    public: TestComponent(const string& str = "0"): Component(), str_(str) {}
-
-    public: void Test() const { cout << "test method" << endl; }
-
-    public: ostream& view(ostream& out) const override { return out << "[TestComponent " << str_ << "]"; }
-};
-
-const Vector2Int Vector2Int::Zero = Vector2Int(0, 0);
-const Vector2Int Vector2Int::Up = Vector2Int(0, 1);
-const Vector2Int Vector2Int::Down = Vector2Int(0, -1);
-const Vector2Int Vector2Int::Right = Vector2Int(1, 0);
-const Vector2Int Vector2Int::Left = Vector2Int(-1, 0);
-
 int main()
 {
+    Map* map = new Map(Vector2Int(11, 11));
+
     InputComponent* input = new InputComponent();
-    GameObject obj(Vector2Int(1, 1), { input });
+    MoveComponent* move = new MoveComponent(map, input);
+    GameObject* obj = new GameObject(Vector2Int(5, 6), { input, move });
+
+    map->set_player(obj);
 
     set_non_blocking();
     while (input->direction() != Vector2Int::Zero) 
     {
-        obj.Update();
+        obj->Update();
+
+        system("clear");
+        map->display();
     }
+
+    delete map;
 
     return 0;
 }

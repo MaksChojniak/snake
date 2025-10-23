@@ -1,16 +1,16 @@
 #include <iostream>
+#include "Component.h"
+// #include "GameObject.h"
 
 using namespace std;
 
-class Component
-{
-    public: Component() {}
-    public: virtual ~Component() {}
 
-    public: virtual void Update() = 0;
+Component::Component() {}
+Component::~Component() {}
 
-    public: virtual ostream& view(ostream& out) const { return out << "[Component]"; }
-};
+void Component::set_owner(GameObject* const owner) { owner_ = owner; }
+
+ostream& Component::view(ostream& out) const { return out << "[Component]"; }
 
 ostream& operator<<(ostream& out, const Component& obj) { return obj.view(out); }
 ostream& operator<<(ostream& out, Component* const obj) { return (*obj).view(out); }

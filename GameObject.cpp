@@ -1,44 +1,47 @@
 #include <iostream>
 #include <vector>
 #include <algorithm> 
-// #include "Component.cpp"
+#include "GameObject.h"
+// #include "Vector2Int.h"
+#include "Component.h"
+#include "Move.h"
 
 using namespace std;
 
-class GameObject
+const Vector2Int& GameObject::position() const { return position_; }
+Vector2Int& GameObject::position() { return position_; }
+
+int GameObject::components_length() const { return components_.size(); }
+
+GameObject::GameObject(): position_(), components_() {}
+GameObject::GameObject(const Vector2Int& pos): position_(pos), components_() {}
+GameObject::GameObject(const Vector2Int& pos, const vector<Component*>& vec): position_(pos), components_(vec) 
 {
-    private: Vector2Int position_;
-    public: const Vector2Int& position() const { return position_; }
+    for(int i = 0; i < components_length(); i++)
+        components_[i]->set_owner(this);
+}
 
-    private: vector<Component*> components_;
-    public: int components_length() const { return components_.size(); }
-
-    public: GameObject(): position_(), components_() {}
-    public: GameObject(const Vector2Int& pos): position_(pos), components_() {}
-    public: GameObject(const Vector2Int& pos, const vector<Component*>& vec): position_(pos), components_(vec) {}
-
-    public: ~GameObject()
+GameObject::~GameObject()
+{
+    for(int i = 0; i < components_length(); i++)
     {
-        for(int i = 0; i < components_length(); i++)
-        {
-            if(components_[i])
-                delete components_[i];
-        }
+        if(components_[i])
+            delete components_[i];
     }
+}
 
-    public: void Update()
+void GameObject::Update()
+{
+    for(int i = 0; i < components_length(); i++)
     {
-        for(int i = 0; i < components_length(); i++)
-        {
-            components_[i]->Update();
-            
-        }
+        components_[i]->Update();
+        
     }
+}
 
-    public: Component& operator[](int i) { return *components_[i]; }
+Component& GameObject::operator[](int i) { return *components_[i]; }
 
-    friend ostream& operator<<(ostream&, GameObject&);
-};
+
 
 ostream& operator<<(ostream& out, GameObject& obj) 
 {

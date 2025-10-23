@@ -1,45 +1,29 @@
 #include <unistd.h>
 #include <termios.h>
 #include <fcntl.h>
-#include "Vector2Int.cpp"
-#include "Component.cpp"
+#include "Input.h"
+// #include "Vector2Int.h"
+// #include "Component.h"
 
 using namespace std;
 
-struct termios orig_termios;
 
-void reset_terminal();
-void set_non_blocking();
-bool is_key_pressed();
-const Vector2Int& readInput(const Vector2Int&);
+const Vector2Int& InputComponent::direction() const { return direction_; }
+Vector2Int& InputComponent::direction() { return direction_; }
 
-class InputComponent : public Component
+InputComponent::InputComponent(): direction_(Vector2Int::Down) {}
+
+void InputComponent::Update()
 {
-    const int SLEEP_TIME = 1000000;
+    direction_ = readInput(direction_);
+    usleep(SLEEP_TIME);
+}
 
-    private: Vector2Int direction_;
-    public: const Vector2Int& direction() const { return direction_; }
-
-    public: InputComponent(): direction_(Vector2Int::Down) {}
-
-    public: void Update() override
-    {
-        direction_ = readInput(direction_);
-
-        if(direction_ == Vector2Int::Up)
-            cout << "UP" << endl;
-        else if(direction_ == Vector2Int::Down)
-            cout << "DOWN" << endl;
-        else if(direction_ == Vector2Int::Left)
-            cout << "LEFT" << endl;
-        else if(direction_ == Vector2Int::Right)
-            cout << "RIGHT" << endl;
-
-        usleep(SLEEP_TIME);
-    }
+ostream& InputComponent::view(ostream& out) const { return out << "[InputComponent]"; }
 
 
-};
+
+struct termios orig_termios;
 
 void reset_terminal() {
     tcsetattr(STDIN_FILENO, TCSANOW, &orig_termios);
